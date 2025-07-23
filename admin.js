@@ -478,7 +478,6 @@ function showDashboard() {
     initializeNavigation();
     loadAllSections();
 }
-
 // Initialize login form
 function initializeLoginForm() {
     const loginForm = document.getElementById('loginForm');
@@ -863,7 +862,6 @@ async function renderSectionTable(section) {
         </div>
       `;
     }
-
     // Helper to render the Edit Modal (with dynamic index)
     function renderEditModal(cat, idx) {
       const editModalId = `editProjectCategoryModal_${idx}`;
@@ -1759,7 +1757,6 @@ async function renderSectionTable(section) {
           }
         });
       }
-
       // Edit Person Modal Functionality
       const editPersonBtn = document.getElementById('editSaurabhKumarBtn');
       const editPersonModal = document.getElementById('editPersonModal');
@@ -2596,7 +2593,6 @@ if (editBtn) {
     }
   };
 }
-
 // Modal interactivity
 (function() {
   const modal = document.getElementById('editVacancyModal');
@@ -3095,7 +3091,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 });
-
 // Dummy function for rendering the edit calendar (reuse your main calendar logic or copy as needed)
 function renderEditCalendarTimePicker() {
   // You can copy the renderCalendarTimePicker logic here, but use editCalendarTimePopup and editCourseTimeInput instead
@@ -3581,10 +3576,6 @@ let event1Data = {
   ],
   files: []
 };
-
-
-
-
 // ... existing code ...
 
 // --- Achievements Data Array ---
@@ -4576,7 +4567,6 @@ function getAllPublications() {
 function setAllPublications(list) {
   localStorage.setItem('publications_list', JSON.stringify(list));
 }
-
 // Render all publication cards
 function renderPublicationCards() {
   const container = document.getElementById('publicationCardsContainer');
@@ -4967,7 +4957,6 @@ if (closeCropBtn) {
     }
   };
 }
-
 /**
  * Creates a social link row for the edit modal, with the correct platform selected.
  * @param {string} platform - The platform name (e.g., "LinkedIn")
