@@ -1,0 +1,154 @@
+/* General Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+/* Navigation */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+/* Cards */
+.card {
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+    margin-bottom: 20px;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+/* Research Vertical Cards */
+.research-vertical-card {
+    height: 100%;
+    transition: transform 0.2s cubic-bezier(.4,2,.6,1), box-shadow 0.2s cubic-bezier(.4,2,.6,1);
+}
+
+.research-vertical-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 24px rgba(40, 167, 69, 0.15), 0 1.5px 6px rgba(0,0,0,0.08);
+    z-index: 2;
+}
+
+.research-vertical-card .card-body {
+    display: flex;
+    flex-direction: column;
+}
+
+/* People Cards */
+.person-card {
+    text-align: center;
+}
+
+.person-card img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin: 20px auto;
+    display: block;
+    object-fit: cover;
+}
+
+/* Project Cards */
+.project-card .card-img-top {
+    height: 250px;
+}
+
+/* Publication List */
+.publication-item {
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.publication-item:last-child {
+    border-bottom: none;
+}
+
+/* Achievement Cards */
+.achievement-card {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    text-align: center;
+}
+
+/* Footer */
+footer {
+    margin-top: auto;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .card-img-top {
+        height: 150px;
+    }
+    
+    .person-card img {
+        width: 120px;
+        height: 120px;
+    }
+}
+
+/* Remove debug borders */
+/* .row { border: 2px dashed red !important; } */
+/* .col-md-6 { border: 2px solid blue !important; } */
+
+/* Remove all custom flex/grid overrides for achievements */
+#achievements .container {
+    width: auto;
+    max-width: 1200px;
+}
+#achievementsList.row,
+#achievementsList .col-md-6 {
+    display: unset;
+    flex: unset;
+    max-width: unset;
+}
+@media (max-width: 768px) {
+    #achievementsList .col-md-6 {
+        flex: unset;
+        max-width: unset;
+    }
+}
+
+/* Force achievements grid to be side by side on desktop */
+#achievementsList.row {
+    display: flex !important;
+    flex-wrap: wrap !important;
+}
+#achievementsList .col-md-6 {
+    flex: 0 0 50% !important;
+    max-width: 50% !important;
+}
+@media (max-width: 768px) {
+    #achievementsList .col-md-6 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+}
+
+.detailed-view.active .research-vertical-card:hover {
+    transform: none !important;
+    box-shadow: none !important;
+    z-index: 1 !important;
+}

@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SIRG Admin Panel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="admin.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+</head>
+<body>
+  <!-- New Login Container (Matching referenced website) -->
+  <div class="login-container" id="loginContainer">
+    <div class="login-card">
+      <div class="login-header">
+        <img src="SIRG Logo.png" alt="SIRG Logo" class="login-logo">
+        <h1>Admin Login</h1>
+        <p>Sign in to access the admin panel</p>
+      </div>
+      <form class="login-form" id="loginForm">
+        <div class="form-group">
+          <label for="adminEmail">Email</label>
+          <div class="input-wrapper">
+            <i class="fas fa-envelope"></i>
+            <input type="email" id="adminEmail" placeholder="Enter your email" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="adminPassword">Password</label>
+          <div class="input-wrapper">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="adminPassword" placeholder="Enter your password" required>
+            <button type="button" class="password-toggle" id="passwordToggle">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+        </div>
+        <button type="submit" class="login-btn">
+          <span>Sign In</span>
+          <i class="fas fa-arrow-right"></i>
+        </button>
+        <div class="login-error" id="loginError"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Updated Admin Dashboard -->
+  <div id="adminDashboard" style="display:none;">
+    <!-- Top Navigation Bar (SIRG logo centered, like main website) -->
+    <nav class="navbar">
+      <div class="navbar-center">
+        <img src="SIRG Logo.png" alt="SIRG Logo" class="navbar-logo">
+      </div>
+    </nav>
+
+    <!-- Main Dashboard Container -->
+    <div class="dashboard-container">
+      <!-- Left Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-content">
+          <div class="sidebar-logo-container">
+            <img src="SIRG Logo.png" alt="SIRG Logo" class="sidebar-logo">
+          </div>
+          <nav class="sidebar-nav">
+            <ul>
+              <li class="nav-item active" data-section="about"><span>About</span></li>
+              <li class="nav-item" data-section="research-verticals"><span>Research Verticals</span></li>
+              <li class="nav-item" data-section="people"><span>People</span></li>
+              <li class="nav-item" data-section="projects"><span>Projects</span></li>
+              <li class="nav-item" data-section="achievements"><span>Achievements</span></li>
+              <li class="nav-item" data-section="publications"><span>Publications</span></li>
+              <li class="nav-item" data-section="teaching"><span>Teaching</span></li>
+              <li class="nav-item" data-section="open-positions"><span>Open Positions</span></li>
+            </ul>
+          </nav>
+          <div class="sidebar-footer">
+            <button onclick="logout()" class="logout-btn">
+              <span>Logout</span>
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Right Content Area -->
+      <main class="main-content">
+        <!-- Content Header -->
+        <div class="content-header" style="display:none;"></div>
+
+        <!-- Content Sections -->
+        <div class="content-sections">
+          <!-- About Section -->
+          <div id="aboutSection" class="content-section active">
+            <div class="section-content">
+              <div class="table-container">
+                <table id="aboutTable" class="admin-table"></table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Research Verticals Section -->
+          <div id="research-verticalsSection" class="content-section">
+            <div class="section-content">
+              <div style="text-align:center; margin: 32px 0 24px 0;">
+                <span style="font-weight:700; color:#111; font-size:2.2rem; display:block;">Manage Research Verticals</span>
+                <span style="font-weight:400; color:#888; font-size:1.13rem; display:block; margin-top: 0.5em;">Add, edit, or remove research verticals.</span>
+              </div>
+              <div id="addResearchVerticalCard" style="background: #fff; border: 1.5px solid #d1d5db; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); padding: 2.2em 2em 2em 2em; width: 100%; max-width: 900px; margin: 36px auto 0 auto; text-align: left; box-sizing: border-box;">
+                <div style="font-weight: 600; color: #111; font-size: 1.35rem; margin-bottom: 1.1rem; text-align:left;">Add New Research Vertical</div>
+                <div style="margin-bottom: 1.1em;">
+                  <label for="researchVerticalNameInput" style="font-size: 0.97rem; color: #444; font-weight: 500; margin-bottom: 0.4em; display: block;">Name</label>
+                  <input id="researchVerticalNameInput" type="text" style="width: 100%; height: 38px; font-size: 1rem; color: #222; background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 8px; padding: 0.4em 1em; outline: none; transition: border-color 0.3s; box-sizing: border-box;" autocomplete="off" />
+                </div>
+                <div style="margin-bottom: 1.1em;">
+                  <label for="researchVerticalOverviewInput" style="font-size: 0.97rem; color: #444; font-weight: 500; margin-bottom: 0.4em; display: block;">Overview</label>
+                  <textarea id="researchVerticalOverviewInput" style="width: 100%; min-height: 38px; font-size: 1rem; color: #222; background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 8px; padding: 0.4em 1em; outline: none; transition: border-color 0.3s; box-sizing: border-box; resize: none; overflow: hidden;" autocomplete="off"></textarea>
+                </div>
+                <!-- Added sections below Overview -->
+                <div style="margin-bottom: 1em;">
+                  <div style="font-size: 1.05rem; color: #444; font-weight: 500; margin-bottom: 0.5em;">Faculty</div>
+                  <div id="facultySelectBoxesContainer" style="display: flex; flex-direction: column; gap: 0.7em; margin-bottom: 0.7em;"></div>
+                  <button id="addFacultyBtn" type="button" style="background: #22b573; color: #fff; border: none; border-radius: 7px; padding: 0.6em 1.5em; font-size: 1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 0.5em; width: 210px;"><span style="font-size: 1.2em;">👤</span> Add Faculty</button>
+                </div>
+                <div style="margin-bottom: 1em;">
+                  <div style="font-size: 1.05rem; color: #444; font-weight: 500; margin-bottom: 0.5em;">Past Students</div>
+                  <button type="button" style="background: #22b573; color: #fff; border: none; border-radius: 7px; padding: 0.6em 1.5em; font-size: 1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 0.5em; width: 210px;"><span style="font-size: 1.2em;">👤</span> Add Student</button>
+                </div>
+                <div style="margin-bottom: 1em;">
+                  <div style="font-size: 1.05rem; color: #444; font-weight: 500; margin-bottom: 0.5em;">Current Students</div>
+                  <button type="button" style="background: #22b573; color: #fff; border: none; border-radius: 7px; padding: 0.6em 1.5em; font-size: 1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 0.5em; width: 210px;"><span style="font-size: 1.2em;">👤</span> Add Student</button>
+                </div>
+                <div style="margin-bottom: 1em;">
+                  <div style="font-size: 1.05rem; color: #444; font-weight: 500; margin-bottom: 0.5em;">Key Objectives</div>
+                  <button type="button" style="background: #22b573; color: #fff; border: none; border-radius: 7px; padding: 0.6em 1.5em; font-size: 1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 0.5em; width: 210px;"><span style="font-size: 1.2em;">+</span> Add Key Objective</button>
+                </div>
+                <div style="margin-bottom: 1em;">
+                  <div style="font-size: 1.05rem; color: #444; font-weight: 500; margin-bottom: 0.5em;">Publications</div>
+                  <button type="button" style="background: #22b573; color: #fff; border: none; border-radius: 7px; padding: 0.6em 1.5em; font-size: 1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 0.5em; width: 210px;"><span style="font-size: 1.2em;">+</span> Add Publication</button>
+                </div>
+                <!-- End added sections -->
+                <div style="width: 100%; display: flex; justify-content: flex-end; margin-top: 2em;">
+                  <button id="createResearchVerticalBtn" type="button" style="background: #007bff; color: #fff; border: none; border-radius: 8px; padding: 0.7em 2.2em; font-size: 1rem; font-weight: 600; cursor: pointer;">Create Research Vertical</button>
+                </div>
+              </div>
+              <div class="table-container">
+                <table id="research-verticalsTable" class="admin-table"></table>
+              </div>
+            </div>
+          </div>
+
+          <!-- People Section -->
+          <div id="peopleSection" class="content-section">
+            <div class="section-content">
+              <div style="text-align:center; margin: 32px 0 24px 0;">
+                <span style="font-weight:700; color:#111; font-size:2.2rem; display:block;">Manage People</span>
+                <span style="font-weight:400; color:#888; font-size:1.13rem; display:block; margin-top: 0.5em;">Add, edit, or remove people from your organization.</span>
+              </div>
+              <!-- Restore the original Add New Person card -->
+              <div id="addPersonCard" style="display: flex; flex-direction: row; justify-content: flex-start; align-items: stretch; background: #fff; border-radius: 18px; box-shadow: 0 4px 16px rgba(0,0,0,0.08); padding: 2.5rem 2.5rem 2.5rem 2.5rem; width: 900px; max-width: 98vw; margin: 0 auto 2.5em auto; min-height: 520px; position: relative;">
+                <!-- Left Side -->
+                <div style="flex: 2; display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-start; position: relative;">
+                  <div style="font-size: 1.5rem; font-weight: 700; color: #222; margin-bottom: 1.2rem;">Add New Person</div>
+                  <!-- Name and Role Row -->
+                  <div style="display: flex; flex-direction: row; width: 100%; gap: 2.5em; align-items: flex-end;">
+                    <div style="width: 50%; display: flex; flex-direction: column; align-items: flex-start; gap: 0.3em;">
+                      <label for="personNameInput" style="font-size: 0.92rem; color: #444; width: 100%; text-align: left;">Name</label>
+                      <input id="personNameInput" type="text" placeholder="Enter name" style="width: 100%; height: 36px; font-size: 1rem; color: #222; background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 8px; padding: 0.4em 1em; outline: none; transition: border-color 0.3s; box-sizing: border-box;" />
+                    </div>
+                    <div style="width: 50%; display: flex; flex-direction: column; align-items: flex-start; gap: 0.3em; position: relative;">
+                      <label for="personRoleInput" style="font-size: 0.92rem; color: #444; width: 100%; text-align: left;">Role</label>
+                      <div id="personRoleInput" tabindex="0" style="width: 100%; height: 36px; font-size: 1rem; color: #222; background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 8px; padding: 0.4em 1em; outline: none; transition: border-color 0.3s; display: flex; align-items: center; cursor: pointer; position: relative; box-sizing: border-box;">
+                        <span id="personRoleSelected">Select Role</span>
+                        <span style="margin-left: auto; color: #888; font-size: 1.2em; display: flex; align-items: center;">
+                          <svg width="18" height="18" viewBox="0 0 20 20"><path d="M5 8l5 5 5-5" stroke="#888" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+                        </span>
+                      </div>
+                      <div id="personRoleDropdown" style="display: none; position: absolute; left: 0; top: 110%; z-index: 10; background: #fff; border-radius: 10px; box-shadow: 0 4px 16px rgba(0,0,0,0.13); margin-top: 0.3em; min-width: 100%; overflow: hidden; border: 1.5px solid #007bff;">
+                        <div class="role-option" data-role="Faculty Coordinator" style="padding: 0.7em 1.2em; font-size: 1rem; color: #222; cursor: pointer; transition: background 0.2s; text-align: left;">Faculty Coordinator</div>
+                        <div class="role-option" data-role="Faculty" style="padding: 0.7em 1.2em; font-size: 1rem; color: #222; cursor: pointer; transition: background 0.2s; text-align: left;">Faculty</div>
+                        <div class="role-option" data-role="PhD Researcher" style="padding: 0.7em 1.2em; font-size: 1rem; color: #222; cursor: pointer; transition: background 0.2s; text-align: left;">PhD Researcher</div>
+                        <div class="role-option" data-role="M.Tech. Researcher" style="padding: 0.7em 1.2em; font-size: 1rem; color: #222; cursor: pointer; transition: background 0.2s; text-align: left;">M.Tech. Researcher</div>
+                        <div class="role-option" data-role="Student" style="padding: 0.7em 1.2em; font-size: 1rem; color: #222; cursor: pointer; transition: background 0.2s; text-align: left;">Student</div>
+                        <div class="role-option" data-role="Summer intern" style="padding: 0.7em 1.2em; font-size: 1rem; color: #222; cursor: pointer; transition: background 0.2s; text-align: left;">Summer intern</div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Roll Number Row (always full width, below Name/Role) -->
+                  <div id="addPersonRollNumberField" style="display:none; margin-top:10px; width:100%;">
+                    <label for="personRollNumberInput" style="font-size: 0.92rem; color: #444; width: 100%; text-align: left;">Roll Number</label>
+                    <input id="personRollNumberInput" type="text" placeholder="Enter roll number" style="width: 100%; height: 36px; font-size: 1rem; color: #222; background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 8px; padding: 0.4em 1em; outline: none; transition: border-color 0.3s; box-sizing: border-box;" />
+                  </div>
+                  <!-- Info Row (restored) -->
+                  <div style="margin-top: 1.2em; width: 100%;">
+                    <div style="display: flex; flex-direction: column; align-items: flex-start; width: 100%; max-width: 100%;">
+                      <label for="personInfoInput" style="font-size: 0.92rem; color: #444; margin-bottom: 0.3em;">Info</label>
+                      <textarea id="personInfoInput" placeholder="To create bullet points, separate each point with a semicolon (;)" style="width: 100%; height: 28px; font-size: 0.9rem; color: #222; background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 8px; padding: 0.3em 0.8em; outline: none; transition: border-color 0.3s; margin-top: 0.3em; resize: none; overflow: hidden; box-sizing: border-box; line-height: 1.2;"></textarea>
+                    </div>
+                  </div>
+                  <div style="margin-top: 1.2em; width: 100%;">
+                    <div style="display: flex; flex-direction: column; align-items: flex-start; width: 85%; min-width: 280px; max-width: 500px;">
+                      <div style="margin-bottom: 0.3em;">
+                        <span style="font-size: 0.92rem; color: #444;">Social Links</span>
+                      </div>
+                      <div id="socialLinksContainer" style="width: 100%; margin-bottom: 0.7em;"></div>
+                      <button id="addSocialLinkBtn" type="button" style="background: #28a745; color: #fff; border: none; border-radius: 7px; padding: 0.6em 1.3em; font-size: 1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 0.5em;">
+                        <span style="font-size: 1.2em;">+</span> Add Social Link
+                      </button>
+                    </div>
+                  </div>
+                  <div style="margin-top: 2.2em; width: 100%; display: flex; flex-direction: column; align-items: flex-start;">
+                    <div id="personAvatarCircle" style="width: 110px; height: 110px; border-radius: 50%; background: #f0f0f0; display: flex; align-items: center; justify-content: center; margin-bottom: 1.1em; position: relative; overflow: hidden; border: 2px solid #e9ecef;">
+                      <img id="personAvatarIcon" src="https://cdn0.iconfinder.com/data/icons/set-ui-app-android/32/8-512.png" alt="avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" />
+                    </div>
+                    <button id="uploadImageBtn" type="button" style="background: #007bff; color: #fff; border: none; border-radius: 7px; padding: 0.7em 1.5em; font-size: 1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 0.6em;">
+                      <svg width="20" height="20" fill="#fff" viewBox="0 0 20 20"><path d="M16.7 10.8c-.4 0-.7.3-.7.7v3.5c0 .4-.3.7-.7.7H4.7c-.4 0-.7-.3-.7-.7v-3.5c0-.4-.3-.7-.7-.7s-.7.3-.7.7v3.5c0 1.2 1 2.2 2.2 2.2h10.6c1.2 0 2.2-1 2.2-2.2v-3.5c0-.4-.3-.7-.7-.7z"/><path d="M10.7 12.7c.3.3.7.3 1 0l3.2-3.2c.3-.3.3-.7 0-1s-.7-.3-1 0l-1.8 1.8V3.7c0-.4-.3-.7-.7-.7s-.7.3-.7.7v6.6l-1.8-1.8c-.3-.3-.7-.3-1 0s-.3.7 0 1l3.2 3.2z"/></svg>
+                      Upload Image
+                    </button>
+                    <input id="personImageInput" type="file" accept="image/*" style="display: none;" />
+                  </div>
+                  <div class="show-in-people-row" style="margin-top:10px;">
+                    <label for="addShowInPeopleCheckbox" class="custom-checkbox-label">
+                      <input type="checkbox" id="addShowInPeopleCheckbox" style="display:none;">
+                      <span class="custom-checkbox"></span>
+                      Show in People Page
+                    </label>
+                  </div>
+                </div>
+                <!-- Right Side (empty for now) -->
+                <div style="flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-end;">
+                  <button id="createPersonBtn" type="button" style="background: #007bff; color: #fff; border: none; border-radius: 7px; padding: 0.7em 1.8em; font-size: 1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 0.5em; margin-top: auto;">
+                    Create Person
+                  </button>
+                </div>
+              </div>
+              <!-- Keep only one search box below the Add New Person card -->
+              <div style="display: flex; justify-content: center; margin: 36px auto 0 auto; width: 100%; max-width: 900px;">
+                <div style="position: relative; width: 100%; max-width: 100%;">
+                  <input id="peopleAdminSearch" type="text" placeholder="Search people..." style="width: 100%; height: 40px; font-size: 1.08rem; color: #222; background: #fff; border: 2px solid #e9ecef; border-radius: 8px; padding: 0.4em 2.5em 0.4em 1em; outline: none; transition: border-color 0.3s; box-sizing: border-box;" autocomplete="off" />
+                  <span style="position: absolute; right: 0.9em; top: 50%; transform: translateY(-50%); color: #888; pointer-events: none;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                  </span>
+                </div>
+              </div>
+              <!-- People cards will be rendered below the search box -->
+              <div id="peopleCardsContainer"></div>
+              <!-- Edit Person Crop Modal -->
+              <div id="editPersonCropModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(2px);">
+                <!-- Crop modal content will be dynamically inserted by JavaScript -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Achievements Section -->
+          <div id="achievementsSection" class="content-section" style="background: #f5f6fa;">
+            <div class="section-content">
+              <div style="text-align:center; margin: 32px 0 24px 0;">
+                <span style="font-weight:700; color:#111; font-size:2.2rem; display:block;">Manage Achievements</span>
+                <span style="font-weight:400; color:#888; font-size:1.13rem; display:block; margin-top: 0.5em;">Add, edit, or remove research achievements in our comprehensive collection.</span>
+                <div style="display: flex; justify-content: center; margin-top: 2.2em; padding: 0 32px; box-sizing: border-box;">
+                  <div style="position: relative; width: 100%; max-width: 100%;">
+                    <input id="achievementAdminSearch" type="text" placeholder="Search achievements..." style="width: 100%; height: 40px; font-size: 1.08rem; color: #222; background: #fff; border: 2px solid #e9ecef; border-radius: 8px; padding: 0.4em 2.5em 0.4em 1em; outline: none; transition: border-color 0.3s; box-sizing: border-box;" autocomplete="off" />
+                    <span style="position: absolute; right: 0.9em; top: 50%; transform: translateY(-50%); color: #888; pointer-events: none;">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div id="addAchievementCard" style="background: #fff; border: 1.5px solid #d1d5db; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); padding: 2.2em 2em 2em 2em; width: 100%; max-width: 900px; margin: 36px auto 0 auto; text-align: left; box-sizing: border-box;">
+                <div style="font-weight: 600; color: #111; font-size: 1.35rem; margin-bottom: 1.1rem; text-align:left;">Add New Achievement</div>
+                <div style="margin-bottom: 1.2em;">
+                  <label for="achievementCategoryInput" style="font-size: 0.97rem; color: #444; font-weight: 500; margin-bottom: 0.4em; display: block;">Achievement Category</label>
+                  <input id="achievementCategoryInput" type="text" style="width: 100%; height: 38px; font-size: 1rem; color: #222; background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 8px; padding: 0.4em 1em; outline: none; transition: border-color 0.3s; box-sizing: border-box;" autocomplete="off" />
+                </div>
+                <div id="keyValuePairsContainer">
+                  <div class="key-value-row" style="display: flex; gap: 1.2em; margin-bottom: 1.1em; align-items: flex-start;">
+                    <div style="flex: 1; position: relative;">
+                      <input class="achievementKeyInput" type="text" placeholder="Key" style="width: 100%; height: 38px; font-size: 1rem; color: #222; background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 8px; padding: 0.4em 1em; outline: none; transition: border-color 0.3s; box-sizing: border-box;" autocomplete="off" />
+                    </div>
+                    <div style="flex: 1; position: relative;">
+                      <input class="achievementValueInput" type="text" placeholder="Value" style="width: 100%; height: 38px; font-size: 1rem; color: #222; background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 8px; padding: 0.4em 1em; outline: none; transition: border-color 0.3s; box-sizing: border-box;" autocomplete="off" />
+                    </div>
+                    <span class="deletePairBtn" style="margin-left: 16px; margin-top: 2px; cursor: pointer; color: #dc3545; font-size: 1.3rem; display: flex; align-items: center; background: #fff; padding-left: 2px; height: 38px; align-self: center;" title="Delete pair">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#dc3545" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </span>
+                  </div>
+                </div>
+                <button id="addPairBtn" type="button" style="background: #007bff; color: #fff; border: none; border-radius: 7px; padding: 0.7em 1.3em; font-size: 1rem; font-weight: 600; cursor: pointer; margin-bottom: 1.5em; display: flex; align-items: center; gap: 0.5em; transition: background 0.2s;">+ Add Another Pair</button>
+                <div id="uploadBox" style="border: 2px dashed #bfc4cc; border-radius: 10px; background: #fafbfc; min-height: 90px; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 1.5em; cursor: pointer; position: relative;">
+                  <div style="margin-top: 1.1em; margin-bottom: 0.7em;">
+                    <img src="https://www.pngplay.com/wp-content/uploads/8/Upload-Icon-Logo-Transparent-Free-PNG.png" alt="Upload Icon" style="width: 54px; height: 54px; object-fit: contain; opacity: 0.7;" />
+                  </div>
+                  <div style="color: #888; font-size: 0.98rem; font-weight: 500;">Upload files</div>
+                  <div style="color: #bbb; font-size: 0.85rem; margin-bottom: 1.1em;">(Images and PDFs are accepted)</div>
+                  <input id="achievementFileInput" type="file" accept="image/*,application/pdf" multiple style="opacity:0; position:absolute; left:0; top:0; width:100%; height:100%; cursor:pointer;" />
+                </div>
+                <div id="filePreviewContainer" style="display: flex; flex-wrap: wrap; gap: 1em; margin-bottom: 1.5em;"></div>
+                <button id="addAchievementBtn" type="button" style="background: #003366; color: #fff; border: none; border-radius: 7px; padding: 0.9em 1.7em; font-size: 1.08rem; font-weight: 700; cursor: pointer; display: block; margin: 0 auto 0 0; transition: background 0.2s;">Add Achievement</button>
+              </div>
+
+              <div class="table-container">
+                <table id="achievementsTable" class="admin-table"></table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Publications Section -->
+          <div id="publicationsSection" class="content-section">
+            <div class="section-content">
+              <!-- ADDED: Publications header and subheader -->
+              <div style="text-align:center; margin: 32px 0 24px 0;">
+                <span style="font-weight:700; color:#111; font-size:2.2rem; display:block;">Manage Publications</span>
+                <span style="font-weight:400; color:#888; font-size:1.13rem; display:block; margin-top: 0.5em;">Add, edit, or remove research publications in our comprehensive collection.</span>
+              </div>
+              <!-- ADDED: Publications search box -->
+              <div style="display: flex; justify-content: center; margin: 24px auto 0 auto; width: 100%; max-width: 900px;">
+                <div style="position: relative; width: 100%; max-width: 100%;">
+                  <input id="publicationsAdminSearch" type="text" placeholder="Search publications..." style="width: 100%; height: 40px; font-size: 1.08rem; color: #222; background: #fff; border: 2px solid #e9ecef; border-radius: 8px; padding: 0.4em 2.5em 0.4em 1em; outline: none; transition: border-color 0.3s; box-sizing: border-box;" autocomplete="off" />
+                  <span style="position: absolute; right: 0.9em; top: 50%; transform: translateY(-50%); color: #888; pointer-events: none;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                  </span>
+                </div>
+              </div>
+              <!-- ADDED: Add New Publication Card -->
+              <div style="background: #fff; border: 1.5px solid #d1d5db; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); padding: 2.2em 2em 2em 2em; width: 100%; max-width: 900px; margin: 36px auto 0 auto; text-align: left; box-sizing: border-box;">
+                <div style="font-weight: 700; color: #111; font-size: 1.35rem; margin-bottom: 1.1rem; text-align:left;">Add New Publication</div>
+                <div style="margin-bottom: 0.7em;">
+                  <label style="font-size: 0.97rem; color: #888; font-weight: 500; margin-bottom: 0.4em; display: block;">Type of Publication</label>
+                  <div id="publicationTypeSelect" tabindex="0" style="width: 100%; height: 38px; font-size: 1rem; color: #888; background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 8px; padding: 0.4em 1em; outline: none; transition: border-color 0.3s; display: flex; align-items: center; cursor: pointer; position: relative; box-sizing: border-box; user-select: none;">
+                    <span id="publicationTypeSelected">Select type</span>
+                    <span style="margin-left: auto; color: #888; font-size: 1.2em; display: flex; align-items: center;">
+                      <svg width="18" height="18" viewBox="0 0 20 20"><path d="M5 8l5 5 5-5" stroke="#888" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+                    </span>
+                    <div id="publicationTypeDropdown" style="display: none; position: absolute; left: 0; top: 110%; z-index: 10; background: #fff; border-radius: 10px; box-shadow: 0 4px 16px rgba(0,0,0,0.13); margin-top: 0.3em; min-width: 100%; overflow: hidden; border: 1.5px solid #007bff;">
+                      <div class="publication-type-option" data-type="Select type" style="padding: 0.7em 1.2em; font-size: 1rem; color: #888; cursor: pointer; background: #e6f0ff; text-align: left; font-weight: 600;">Select type</div>
+                      <div class="publication-type-option" data-type="National conference" style="padding: 0.7em 1.2em; font-size: 1rem; color: #111; cursor: pointer; background: #e6f0ff; text-align: left;">National conference</div>
+                      <div class="publication-type-option" data-type="International conference" style="padding: 0.7em 1.2em; font-size: 1rem; color: #111; cursor: pointer; background: #e6f0ff; text-align: left;">International conference</div>
+                      <div class="publication-type-option" data-type="International journal" style="padding: 0.7em 1.2em; font-size: 1rem; color: #111; cursor: pointer; background: #e6f0ff; text-align: left;">International journal</div>
+                      <div class="publication-type-option" data-type="National journal" style="padding: 0.7em 1.2em; font-size: 1rem; color: #111; cursor: pointer; background: #e6f0ff; text-align: left;">National journal</div>
+                      <div class="publication-type-option" data-type="Book" style="padding: 0.7em 1.2em; font-size: 1rem; color: #111; cursor: pointer; background: #e6f0ff; text-align: left;">Book</div>
+                      <div class="publication-type-option" data-type="Book chapter" style="padding: 0.7em 1.2em; font-size: 1rem; color: #111; cursor: pointer; background: #e6f0ff; text-align: left;">Book chapter</div>
+                    </div>
+                  </div>
+                </div>
+                <div style="margin-bottom: 1.1em;">
+                  <label style="font-size: 0.97rem; color: #888; font-weight: 500; margin-bottom: 0.4em; display: block;">Description</label>
+                  <textarea id="publicationDescriptionInput" style="width: 100%; min-height: 38px; font-size: 1rem; color: #222; background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 8px; padding: 0.4em 1em; outline: none; transition: border-color 0.3s; box-sizing: border-box; resize: horizontal; overflow: auto;" autocomplete="off"></textarea>
+                </div>
+                <button id="addPublicationBtn" type="button" style="background: #007bff; color: #fff; border: none; border-radius: 7px; padding: 0.7em 1.5em; font-size: 1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 0.6em; width: 210px;"><span style="font-size: 1.2em;">+</span> Add Publication</button>
+              </div>
+              <!-- Container for dynamically added publication cards -->
+              <div class="publication-card" id="publication-card-1">
+                <div class="file-icon-and-text">
+                  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4ttMCWFYQ3JxN8cLIfxlN43bPxyHTgt9zTQ&s" alt="File Icon" class="file-icon" />
+                  <div class="publication-title">International Conference</div>
+                  <div class="publication-details">
+                    Ritik Bansal, Utkarsh Khandelwal and Saurabh Kumar, "Collaborative Deployment Strategy for Efficient Connectivity in the Internet of Things", Proceedings of the 2nd International Conference on Mathematical Modeling, Computational Intelligence Techniques and Renewable Energy (MMCITRE), Gandhinagar, Gujarat, India: Springer, 6–8 February 2021, pp. 393–403.
+                  </div>
+                  <div class="publication-actions">
+                    <button class="edit-btn" onclick="openEditModal('publication-card-1')">Edit</button>
+                    <button class="delete-btn" onclick="deletePublicationCard('publication-card-1')">Delete</button>
+                  </div>
+                </div>
+              </div>
+              <div id="publicationCardsContainer"></div>
+
+              <div class="table-container">
+                <table id="publicationsTable" class="admin-table"></table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Teaching Section -->
+          <div id="teachingSection" class="content-section">
+            <div class="section-content" style="background: #f5f6fa; min-height: 100vh; padding-bottom: 40px;">
+              <div style="text-align:center; margin-bottom: 18px;">
+                <span style="font-weight:700; color:#111; font-size:2.2rem;">Manage Courses</span>
+              </div>
+              <div class="table-container" style="margin-bottom: 40px;">
+                <table id="teachingTable" class="admin-table"></table>
+              </div>
+              <div id="addTeachingVacancyCard" style="display: flex; flex-direction: column; align-items: flex-start; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); padding: 2.2em 2em 2em 2em; width: 900px; max-width: 98vw; margin: 40px auto 0 auto; text-align: left; box-sizing: border-box; min-height: 400px;">
+                <div style="font-weight: bold; color: #111; font-size: 1.5rem; margin-bottom: 1.5rem;">Add New Course</div>
+                <div style="display: flex; flex-direction: row; width: 100%; gap: 2em; margin-bottom: 0.3em;">
+                  <div style="flex: 1;"><label style="font-size: 0.92rem; color: #444; width: 100%; text-align: left;">Course Name</label></div>
+                  <div style="flex: 1;"><label style="font-size: 0.92rem; color: #444; width: 100%; text-align: left;">Course Code</label></div>
+                </div>
+                <div style="display: flex; flex-direction: row; width: 100%; gap: 2em;">
+                  <div style="flex: 1;"><input type="text" style="width: 100%; height: 36px; font-size: 1rem; color: #222; background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 8px; padding: 0.4em 1em; outline: none; transition: border-color 0.3s; box-sizing: border-box;" /></div>
+                  <div style="flex: 1;"><input type="text" style="width: 100%; height: 36px; font-size: 1rem; color: #222; background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 8px; padding: 0.4em 1em; outline: none; transition: border-color 0.3s; box-sizing: border-box;" /></div>
+                </div>
+                <div style="display: flex; flex-direction: row; width: 100%; gap: 2em; margin-top: 1.2em;">
+                  <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 0.3em;">
+                    <label style="font-size: 0.92rem; color: #444; width: 100%; text-align: left;">Course Type</label>
+                    <input type="text" style="width: 100%; height: 36px; font-size: 1rem; color: #222; background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 8px; padding: 0.4em 1em; outline: none; transition: border-color 0.3s; box-sizing: border-box;" />
+                  </div>
+                  <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 0.3em;">
+                    <label style="font-size: 0.92rem; color: #444; width: 100%; text-align: left;">Course Time</label>
+                    <div style="width: 100%; height: 36px; position: relative;">
+                      <input id="courseTimeInput" type="text" placeholder="dd-mm-yyyy --:--" style="width: 100%; height: 36px; font-size: 1rem; color: #222; background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 8px; padding: 0.4em 2.5em 0.4em 1em; outline: none; transition: border-color 0.3s; box-sizing: border-box;" autocomplete="off" />
+                      <span id="calendarIcon" style="position: absolute; right: 0.7em; top: 50%; transform: translateY(-50%); cursor: pointer; color: #007bff; display: flex; align-items: center;">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#007bff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                      </span>
+                      <div id="calendarTimePopup" style="display: none; position: absolute; top: 110%; left: 0; z-index: 10; background: #fff; border: 1px solid #e9ecef; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 1em; min-width: 320px; min-height: 220px; flex-direction: row; gap: 1.5em;">
+                        <!-- Calendar and time picker will be rendered here by JS -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div style="display: flex; flex-direction: row; width: 100%; gap: 2em; margin-top: 1.2em;">
+                  <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 0.3em;">
+                    <label style="font-size: 0.92rem; color: #444; width: 100%; text-align: left;">Semester</label>
+                    <input id="semesterInput" type="number" min="1" max="12" step="1" value="1" style="width: 100%; height: 36px; font-size: 1rem; color: #222; background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 8px; padding: 0.4em 1em; outline: none; transition: border-color 0.3s; box-sizing: border-box;" />
+                  </div>
+                  <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 0.3em;">
+                    <label style="font-size: 0.92rem; color: #444; width: 100%; text-align: left;">Credits</label>
+                    <input id="creditsInput" type="number" min="0" max="40" step="1" value="0" style="width: 100%; height: 36px; font-size: 1rem; color: #222; background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 8px; padding: 0.4em 1em; outline: none; transition: border-color 0.3s; box-sizing: border-box;" />
+                  </div>
+                </div>
+                <div style="display: flex; flex-direction: row; width: 100%; gap: 2em; margin-top: 1.2em;">
+                  <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 0.3em;">
+                    <label style="font-size: 0.92rem; color: #444; width: 100%; text-align: left;">Course Instructor</label>
+                    <input id="courseInstructorInput" type="text" style="width: 100%; height: 36px; font-size: 1rem; color: #222; background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 8px; padding: 0.4em 1em; outline: none; transition: border-color 0.3s; box-sizing: border-box;" />
+                  </div>
+                  <div style="flex: 1;"></div>
+                </div>
+                <div style="display: flex; flex-direction: row; width: 100%; gap: 2em; margin-top: 1.5em;">
+                  <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start;">
+                    <button id="addCourseBtn" type="button" style="background: #007bff; color: #fff; border: none; border-radius: 7px; padding: 0.8em 1.5em; font-size: 1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 0.5em; transition: background 0.2s;"><span style="font-size: 1.2em;">+</span> Add Course</button>
+                  </div>
+                  <div style="flex: 1;"></div>
+                </div>
+              </div>
+              <div class="courses-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2em; margin: 32px auto 40px auto; max-width: 1200px; width: 900px; max-width: 98vw;">
+                <!-- New course cards will be inserted here by JS -->
+                <div id="courseCard1" style="background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); padding: 1.5em 1.5em 1.5em 1.5em; display: flex; flex-direction: row; align-items: center; min-height: 210px; position: relative; width: 100%; max-width: 100%; box-sizing: border-box;">
+                  <div style="flex: 1; display: flex; flex-direction: column; gap: 0.2em; width: 100%; max-width: 100%; box-sizing: border-box;">
+                    <span style="color: #1ca97c; font-size: 1.25rem; font-weight: 700; white-space: normal; overflow-wrap: break-word; word-break: break-word; width: 100%; max-width: 100%; display: block;">Multiagent Systems</span>
+                    <span style="color: #1ca97c; font-size: 1.05rem; font-weight: 600; margin-bottom: 0.2em; overflow-wrap: break-word; word-break: break-word; width: 100%; max-width: 100%; display: block;">CSE-3231</span>
+                    <span style="color: #111; font-size: 1.05rem; font-weight: 500; overflow-wrap: break-word; word-break: break-word; width: 100%; max-width: 100%; display: block;">Dr. Saurabh Kumar</span>
+                    <span style="color: #111; font-size: 1.05rem; font-weight: 500; overflow-wrap: break-word; word-break: break-word; width: 100%; max-width: 100%; display: block;">Semester 5</span>
+                    <span style="color: #111; font-size: 1.05rem; font-weight: 500; overflow-wrap: break-word; word-break: break-word; width: 100%; max-width: 100%; display: block;">3 Credits</span>
+                    <span style="display: inline-block; background: #e6f9f0; color: #1ca97c; font-size: 1.05rem; font-weight: 600; border-radius: 16px; padding: 0.18em 1.1em; margin-top: 0.5em; overflow-wrap: break-word; word-break: break-word; width: 100%; max-width: 100%;">Program Elective</span>
+                    <div style="display: flex; flex-direction: row; justify-content: flex-end; gap: 0.7em; margin-top: 1.1em;">
+                      <button style="background: #ffc107; color: #111; border: none; border-radius: 6px; padding: 0.45em 1.2em; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s;" onclick="openEditCourseModal('courseCard1')">Edit</button>
+                      <button style="background: #dc3545; color: #fff; border: none; border-radius: 6px; padding: 0.45em 1.2em; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s;" onclick="deleteCourseCard('courseCard1')">Delete</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Open Positions Section -->
+          <div id="open-positionsSection" class="content-section">
+            <div class="section-content">
+              <div class="table-container">
+                <table id="open-positionsTable" class="admin-table"></table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Projects Section -->
+          <section id="projectsSection" class="content-section">
+            <table id="projectsTable" style="width:100%; border-radius: 12px; overflow: hidden;">
+              <!-- Content will be injected by admin.js -->
+            </table>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Modal Overlay -->
+  <div id="modalOverlay" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modalTitle">Add New Item</h3>
+        <button onclick="closeModal()" class="modal-close">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <form id="modalForm" class="modal-form"></form>
+    </div>
+  </div>
+
+  <!-- Add Project Modal (hidden by default) -->
+  <div id="addProjectModal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="closeAddProjectModal">&times;</span>
+      <h3>Add Project</h3>
+      <form id="addProjectForm">
+        <input type="text" name="name" placeholder="Project Name" required>
+        <input type="text" name="category" placeholder="Category" required>
+        <input type="number" name="year" placeholder="Year" required>
+        <input type="text" name="team" placeholder="Team Members (comma separated)" required>
+        <select name="status" required>
+          <option value="Active">Active</option>
+          <option value="Completed">Completed</option>
+        </select>
+        <button type="submit" class="btn btn-success">Add</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Course Modal (hidden by default) -->
+  <div id="editCourseOverlay" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.18); z-index:1000;"></div>
+  <div id="editCourseModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#fff; border-radius:16px; box-shadow:0 8px 32px rgba(0,0,0,0.18); min-width:370px; max-width:98vw; width:420px; padding:2.2em 2.2em 1.5em 2.2em; z-index:1001; max-height:90vh; overflow-y:auto;">
+    <div style="text-align:center; font-weight:700; font-size:1.45rem; margin-bottom:1.2em;">Edit Course</div>
+    <div style="display:flex; flex-direction:column; gap:0.7em;">
+      <label style="font-size:0.97rem; color:#444; text-align:left;">Course Name</label>
+      <input id="editCourseName" type="text" style="width:100%; height:36px; font-size:1rem; color:#222; background:#f8f9fa; border:2px solid #e9ecef; border-radius:8px; padding:0.4em 1em; outline:none; transition:border-color 0.3s; box-sizing:border-box;" />
+      <label style="font-size:0.97rem; color:#444; text-align:left;">Course Code</label>
+      <input id="editCourseCode" type="text" style="width:100%; height:36px; font-size:1rem; color:#222; background:#f8f9fa; border:2px solid #e9ecef; border-radius:8px; padding:0.4em 1em; outline:none; transition:border-color 0.3s; box-sizing:border-box;" />
+      <label style="font-size:0.97rem; color:#444; text-align:left;">Course Type</label>
+      <input id="editCourseType" type="text" style="width:100%; height:36px; font-size:1rem; color:#222; background:#f8f9fa; border:2px solid #e9ecef; border-radius:8px; padding:0.4em 1em; outline:none; transition:border-color 0.3s; box-sizing:border-box;" />
+      <label style="font-size:0.97rem; color:#444; text-align:left;">Course Time</label>
+      <div style="width:100%; height:36px; position:relative;">
+        <input id="editCourseTimeInput" type="text" placeholder="dd-mm-yyyy --:--" style="width:100%; height:36px; font-size:1rem; color:#222; background:#f8f9fa; border:2px solid #e9ecef; border-radius:8px; padding:0.4em 2.5em 0.4em 1em; outline:none; transition:border-color 0.3s; box-sizing:border-box;" autocomplete="off" />
+        <span id="editCalendarIcon" style="position:absolute; right:0.7em; top:50%; transform:translateY(-50%); cursor:pointer; color:#007bff; display:flex; align-items:center;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#007bff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        </span>
+        <div id="editCalendarTimePopup" style="display:none; position:absolute; top:110%; left:0; z-index:10; background:#fff; border:1px solid #e9ecef; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); padding:1em; min-width:320px; min-height:220px; flex-direction:row; gap:1.5em;"></div>
+      </div>
+      <label style="font-size:0.97rem; color:#444; text-align:left;">Semester</label>
+      <input id="editSemesterInput" type="number" min="1" max="12" step="1" value="1" style="width:100%; height:36px; font-size:1rem; color:#222; background:#f8f9fa; border:2px solid #e9ecef; border-radius:8px; padding:0.4em 1em; outline:none; transition:border-color 0.3s; box-sizing:border-box;" />
+      <label style="font-size:0.97rem; color:#444; text-align:left;">Credits</label>
+      <input id="editCreditsInput" type="number" min="0" max="40" step="1" value="0" style="width:100%; height:36px; font-size:1rem; color:#222; background:#f8f9fa; border:2px solid #e9ecef; border-radius:8px; padding:0.4em 1em; outline:none; transition:border-color 0.3s; box-sizing:border-box;" />
+      <label style="font-size:0.97rem; color:#444; text-align:left;">Course Instructor</label>
+      <input id="editCourseInstructor" type="text" style="width:100%; height:36px; font-size:1rem; color:#222; background:#f8f9fa; border:2px solid #e9ecef; border-radius:8px; padding:0.4em 1em; outline:none; transition:border-color 0.3s; box-sizing:border-box;" />
+      <div style="display:flex; flex-direction:row; justify-content:flex-end; gap:0.8em; margin-top:1.5em;">
+        <button id="editCourseUpdateBtn" style="background:#007bff; color:#fff; border:none; border-radius:7px; padding:0.8em 1.5em; font-size:1rem; font-weight:600; cursor:pointer; transition:background 0.2s;">Update</button>
+        <button id="editCourseCancelBtn" style="background:#e9ecef; color:#222; border:none; border-radius:7px; padding:0.8em 1.5em; font-size:1rem; font-weight:600; cursor:pointer; transition:background 0.2s;">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Achievement Modal (hidden by default) -->
+  <div id="editAchievementOverlay" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.18); z-index:1000;"></div>
+  <div id="editAchievementModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#fff; border-radius:16px; box-shadow:0 8px 32px rgba(0,0,0,0.18); min-width:370px; max-width:98vw; width:540px; padding:2.2em 2.2em 1.5em 2.2em; z-index:1001; max-height:90vh; overflow-y:auto;">
+    <div style="text-align:left; font-weight:700; font-size:1.45rem; margin-bottom:1.2em;">Edit Achievement</div>
+    <div style="display:flex; flex-direction:column; gap:1.1em;">
+      <div>
+        <label for="editAchievementCategoryInput" style="font-size: 0.97rem; color: #444; font-weight: 500; margin-bottom: 0.4em; display: block;">Achievement Category</label>
+        <input id="editAchievementCategoryInput" type="text" style="width: 100%; height: 38px; font-size: 1rem; color: #222; background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 8px; padding: 0.4em 1em; outline: none; transition: border-color 0.3s; box-sizing: border-box;" autocomplete="off" />
+      </div>
+      <div style="font-size: 0.97rem; color: #444; font-weight: 500; margin-bottom: 0.2em;">Achievements</div>
+      <div id="editKeyValuePairsContainer"></div>
+      <button id="editAddPairBtn" type="button" style="background: #007bff; color: #fff; border: none; border-radius: 7px; padding: 0.7em 1.3em; font-size: 1rem; font-weight: 600; cursor: pointer; margin-bottom: 1.5em; display: flex; align-items: center; gap: 0.5em; transition: background 0.2s; width: fit-content;">+ Add Another Pair</button>
+      <div style="font-size: 0.97rem; color: #444; font-weight: 500; margin-bottom: 0.2em;">Current Images</div>
+      <div id="editCurrentImagesContainer" style="display: flex; flex-wrap: wrap; gap: 1em; margin-bottom: 1.5em;"></div>
+      <div id="editUploadBox" style="border: 2px dashed #bfc4cc; border-radius: 10px; background: #fafbfc; min-height: 90px; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 1.5em; cursor: pointer; position: relative;">
+        <div style="margin-top: 1.1em; margin-bottom: 0.7em;">
+          <img src="https://www.pngplay.com/wp-content/uploads/8/Upload-Icon-Logo-Transparent-Free-PNG.png" alt="Upload Icon" style="width: 54px; height: 54px; object-fit: contain; opacity: 0.7;" />
+        </div>
+        <div style="color: #888; font-size: 0.98rem; font-weight: 500;">Upload files</div>
+        <div style="color: #bbb; font-size: 0.85rem; margin-bottom: 1.1em;">(Images and PDFs are accepted)</div>
+        <input id="editAchievementFileInput" type="file" accept="image/*,application/pdf" multiple style="opacity:0; position:absolute; left:0; top:0; width:100%; height:100%; cursor:pointer;" />
+      </div>
+      <div id="editFilePreviewContainer" style="display: flex; flex-wrap: wrap; gap: 1em; margin-bottom: 1.5em;"></div>
+      <div style="display:flex; flex-direction:row; justify-content:flex-end; gap:0.8em; margin-top:1.5em;">
+        <button id="editAchievementUpdateBtn" style="background:#007bff; color:#fff; border:none; border-radius:7px; padding:0.8em 1.5em; font-size:1rem; font-weight:700; cursor:pointer; transition:background 0.2s;">Update</button>
+        <button id="editAchievementCancelBtn" style="background:#e9ecef; color:#222; border:none; border-radius:7px; padding:0.8em 1.5em; font-size:1rem; font-weight:700; cursor:pointer; transition:background 0.2s;">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add this modal for cropping -->
+  <div id="personCropModal" style="display:none; position:fixed; top:50%; left:60%; transform:translate(-50%,-50%); background:#fff; border-radius:16px; box-shadow:0 8px 32px rgba(0,0,0,0.18); min-width:370px; max-width:98vw; width:420px; padding:2.2em 2.2em 1.5em 2.2em; z-index:1001; max-height:90vh; overflow-y:auto;">
+    <div style="position:relative;">
+      <button id="closeCropModalBtn" style="position:absolute; top:0; right:0; background:none; border:none; font-size:1.7rem; color:#888; cursor:pointer; z-index:2;">
+        &times;
+      </button>
+      <div style="text-align:center; font-weight:700; font-size:1.25rem; margin-bottom:1.2em;">Crop Image</div>
+      <div style="display:flex; justify-content:center; align-items:center; min-height:260px;">
+        <img id="cropperImage" src="" style="max-width:100%; max-height:320px; border-radius:12px;" />
+      </div>
+      <div style="display:flex; justify-content:flex-end; margin-top:1.5em;">
+        <button id="saveCroppedImageBtn" style="background:#007bff; color:#fff; border:none; border-radius:7px; padding:0.8em 1.5em; font-size:1rem; font-weight:600; cursor:pointer;">Save Image</button>
+      </div>
+    </div>
+  </div>
+  <script>
+(function(){
+  var uploadBtn = document.getElementById('uploadImageBtn');
+  var fileInput = document.getElementById('personImageInput');
+  var cropModal = document.getElementById('personCropModal');
+  var cropperImage = document.getElementById('cropperImage');
+  var closeCropBtn = document.getElementById('closeCropModalBtn');
+  var saveCropBtn = document.getElementById('saveCroppedImageBtn');
+  var avatarIcon = document.getElementById('personAvatarIcon');
+  var cropper = null;
+
+  uploadBtn.onclick = function() {
+    fileInput.value = '';
+    fileInput.click();
+  };
+  fileInput.onchange = function() {
+    if (fileInput.files && fileInput.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        cropperImage.src = e.target.result;
+        cropModal.style.display = 'block';
+        if (cropper) { cropper.destroy(); cropper = null; }
+        setTimeout(function() {
+          cropper = new Cropper(cropperImage, {
+            aspectRatio: 1,
+            viewMode: 1,
+            autoCropArea: 1,
+            background: false,
+            movable: true,
+            zoomable: true,
+            rotatable: false,
+            scalable: false,
+            responsive: true,
+            minContainerWidth: 320,
+            minContainerHeight: 320
+          });
+        }, 100);
+      };
+      reader.readAsDataURL(fileInput.files[0]);
+    }
+  };
+  closeCropBtn.onclick = function() {
+    cropModal.style.display = 'none';
+    if (cropper) { cropper.destroy(); cropper = null; }
+  };
+  saveCropBtn.onclick = function() {
+    if (cropper) {
+      var canvas = cropper.getCroppedCanvas({ width: 110, height: 110, imageSmoothingQuality: 'high' });
+      avatarIcon.src = canvas.toDataURL('image/png');
+      avatarIcon.style.filter = 'none';
+      cropModal.style.display = 'none';
+      cropper.destroy();
+      cropper = null;
+    }
+  };
+})();
+</script>
+  <script src="admin.js"></script>
+  <script>
+const achievementAdminSearch = document.getElementById('achievementAdminSearch');
+if (achievementAdminSearch) {
+  achievementAdminSearch.addEventListener('focus', function() {
+    achievementAdminSearch.style.borderColor = '#007bff';
+  });
+  achievementAdminSearch.addEventListener('blur', function() {
+    achievementAdminSearch.style.borderColor = '#e9ecef';
+  });
+}
+// --- Focus/blur border color for all relevant inputs ---
+function setFocusBlurBlue(input) {
+  input.addEventListener('focus', function() {
+    input.style.borderColor = '#007bff';
+  });
+  input.addEventListener('blur', function() {
+    input.style.borderColor = '#e9ecef';
+  });
+}
+setFocusBlurBlue(document.getElementById('achievementCategoryInput'));
+function setPlaceholderLogic(input, placeholder) {
+  input.addEventListener('input', function() {
+    if (input.value.length > 0) {
+      input.setAttribute('placeholder', '');
+    } else {
+      input.setAttribute('placeholder', placeholder);
+    }
+  });
+}
+// --- Key-Value Pair Logic ---
+function addKeyValueRow() {
+  const row = document.createElement('div');
+  row.className = 'key-value-row';
+  row.style.display = 'flex';
+  row.style.gap = '1.2em';
+  row.style.marginBottom = '1.1em';
+  row.style.alignItems = 'flex-start';
+  row.innerHTML = `
+    <div style="flex: 1; position: relative;">
+      <input class="achievementKeyInput" type="text" placeholder="Key" style="width: 100%; height: 38px; font-size: 1rem; color: #222; background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 8px; padding: 0.4em 1em; outline: none; transition: border-color 0.3s; box-sizing: border-box;" autocomplete="off" />
+    </div>
+    <div style="flex: 1; position: relative;">
+      <input class="achievementValueInput" type="text" placeholder="Value" style="width: 100%; height: 38px; font-size: 1rem; color: #222; background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 8px; padding: 0.4em 1em; outline: none; transition: border-color 0.3s; box-sizing: border-box;" autocomplete="off" />
+    </div>
+    <span class="deletePairBtn" style="margin-left: 16px; margin-top: 2px; cursor: pointer; color: #dc3545; font-size: 1.3rem; display: flex; align-items: center; background: #fff; padding-left: 2px; height: 38px; align-self: center;" title="Delete pair">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#dc3545" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </span>
+  `;
+  // Focus/blur and placeholder logic
+  const keyInput = row.querySelector('.achievementKeyInput');
+  const valueInput = row.querySelector('.achievementValueInput');
+  setFocusBlurBlue(keyInput);
+  setFocusBlurBlue(valueInput);
+  setPlaceholderLogic(keyInput, 'Key');
+  setPlaceholderLogic(valueInput, 'Value');
+  // Delete logic
+  row.querySelector('.deletePairBtn').onclick = function() {
+    row.remove();
+  };
+  document.getElementById('keyValuePairsContainer').appendChild(row);
+}
+// Initial logic for first row
+const firstKeyInput = document.querySelector('.achievementKeyInput');
+const firstValueInput = document.querySelector('.achievementValueInput');
+setFocusBlurBlue(firstKeyInput);
+setFocusBlurBlue(firstValueInput);
+setPlaceholderLogic(firstKeyInput, 'Key');
+setPlaceholderLogic(firstValueInput, 'Value');
+document.querySelector('.deletePairBtn').onclick = function() {
+  this.closest('.key-value-row').remove();
+};
+document.getElementById('addPairBtn').onclick = addKeyValueRow;
+// --- File Upload Logic ---
+const uploadBox = document.getElementById('uploadBox');
+const fileInput = document.getElementById('achievementFileInput');
+const filePreviewContainer = document.getElementById('filePreviewContainer');
+uploadBox.onclick = function(e) {
+  if (e.target === fileInput) return;
+  fileInput.click();
+};
+fileInput.onchange = function() {
+  filePreviewContainer.innerHTML = '';
+  Array.from(fileInput.files).forEach((file, idx) => {
+    const fileDiv = document.createElement('div');
+    fileDiv.style.position = 'relative';
+    fileDiv.style.display = 'inline-block';
+    fileDiv.style.width = '345.68px';
+    fileDiv.style.height = '345.68px';
+    fileDiv.style.border = '1px solid #e9ecef';
+    fileDiv.style.borderRadius = '8px';
+    fileDiv.style.overflow = 'hidden';
+    fileDiv.style.background = '#fff';
+    fileDiv.style.boxShadow = '0 2px 8px rgba(0,0,0,0.04)';
+    let content;
+    if (file.type.startsWith('image/')) {
+      content = document.createElement('img');
+      content.src = URL.createObjectURL(file);
+      content.style.width = '100%';
+      content.style.height = '100%';
+      content.style.objectFit = 'cover';
+    } else if (file.type === 'application/pdf') {
+      content = document.createElement('div');
+      content.style.display = 'flex';
+      content.style.alignItems = 'center';
+      content.style.justifyContent = 'center';
+      content.style.height = '100%';
+      content.innerHTML = '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#007bff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 3v18M16 3v18"/></svg>';
+    }
+    fileDiv.appendChild(content);
+    // Cross icon
+    const cross = document.createElement('span');
+    cross.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#dc3545" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+    cross.style.position = 'absolute';
+    cross.style.top = '6px';
+    cross.style.right = '6px';
+    cross.style.background = '#fff';
+    cross.style.borderRadius = '50%';
+    cross.style.padding = '2px';
+    cross.style.cursor = 'pointer';
+    cross.style.display = 'none';
+    cross.style.zIndex = '2';
+    fileDiv.appendChild(cross);
+    fileDiv.onmouseenter = () => { cross.style.display = 'block'; };
+    fileDiv.onmouseleave = () => { cross.style.display = 'none'; };
+    cross.onclick = function() {
+      // Remove file from input
+      const dt = new DataTransfer();
+      Array.from(fileInput.files).forEach((f, i) => { if (i !== idx) dt.items.add(f); });
+      fileInput.files = dt.files;
+      fileDiv.remove();
+    };
+    filePreviewContainer.appendChild(fileDiv);
+  });
+};
+document.getElementById('deleteSaurabhKumarBtn').onclick = function() {
+  var card = document.getElementById('saurabhKumarCard');
+  if (card) card.remove();
+};
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var roleInput = document.getElementById('personRoleInput');
+  var roleDropdown = document.getElementById('personRoleDropdown');
+  var roleSelected = document.getElementById('personRoleSelected');
+  var open = false;
+  if (roleInput && roleDropdown && roleSelected) {
+    roleInput.onclick = function(e) {
+      e.stopPropagation();
+      open = !open;
+      roleDropdown.style.display = open ? 'block' : 'none';
+      roleInput.style.borderColor = open ? '#007bff' : '#e9ecef';
+    };
+    document.addEventListener('click', function() {
+      roleDropdown.style.display = 'none';
+      roleInput.style.borderColor = '#e9ecef';
+      open = false;
+    });
+    Array.from(roleDropdown.getElementsByClassName('role-option')).forEach(function(option) {
+      option.onmouseenter = function() {
+        this.style.background = '#007bff';
+        this.style.color = '#fff';
+      };
+      option.onmouseleave = function() {
+        this.style.background = '#fff';
+        this.style.color = '#222';
+      };
+      option.onclick = function(e) {
+        e.stopPropagation();
+        roleSelected.textContent = this.getAttribute('data-role');
+        roleDropdown.style.display = 'none';
+        roleInput.style.borderColor = '#e9ecef';
+        open = false;
+      };
+    });
+  }
+});
+</script>
+<script>
+(function() {
+  var roleSelected = document.getElementById('personRoleSelected');
+  var rollField = document.getElementById('addPersonRollNumberField');
+  function updateRollField() {
+    var val = roleSelected.textContent.trim();
+    if (val === 'PhD Researcher' || val === 'M.Tech. Researcher' || val === 'Student') {
+      rollField.style.display = '';
+    } else {
+      rollField.style.display = 'none';
+    }
+  }
+  // Update on role select
+  var observer = new MutationObserver(updateRollField);
+  observer.observe(roleSelected, { childList: true });
+  // Also update on page load
+  updateRollField();
+})();
+</script>
+<script>
+(function(){
+  var addBtn = document.getElementById('addSocialLinkBtn');
+  var container = document.getElementById('socialLinksContainer');
+  var platforms = [
+    'Google Scholar', 'ORCID', 'LinkedIn', 'Twitter', 'Github', 'Other'
+  ];
+  function createRow() {
+    var row = document.createElement('div');
+    row.style.display = 'flex';
+    row.style.alignItems = 'center';
+    row.style.gap = '0.7em';
+    row.style.marginBottom = '0.7em';
+
+    // Platform select
+    var selectBox = document.createElement('div');
+    selectBox.tabIndex = 0;
+    selectBox.style.width = '160px';
+    selectBox.style.height = '38px';
+    selectBox.style.background = '#f8f9fa';
+    selectBox.style.border = '2px solid #e9ecef';
+    selectBox.style.borderRadius = '8px';
+    selectBox.style.display = 'flex';
+    selectBox.style.alignItems = 'center';
+    selectBox.style.padding = '0 1em';
+    selectBox.style.position = 'relative';
+    selectBox.style.cursor = 'pointer';
+    selectBox.style.fontSize = '1rem';
+    selectBox.style.color = '#222';
+    selectBox.style.userSelect = 'none';
+    var selectText = document.createElement('span');
+    selectText.textContent = 'Select Platform';
+    selectText.style.flex = '1';
+    var arrow = document.createElement('span');
+    arrow.innerHTML = '<svg width="18" height="18" viewBox="0 0 20 20"><path d="M5 8l5 5 5-5" stroke="#888" stroke-width="2" fill="none" stroke-linecap="round"/></svg>';
+    arrow.style.marginLeft = 'auto';
+    selectBox.appendChild(selectText);
+    selectBox.appendChild(arrow);
+    // Dropdown
+    var dropdown = document.createElement('div');
+    dropdown.style.display = 'none';
+    dropdown.style.position = 'absolute';
+    dropdown.style.left = '0';
+    dropdown.style.top = '110%';
+    dropdown.style.zIndex = '10';
+    dropdown.style.background = '#fff';
+    dropdown.style.borderRadius = '10px';
+    dropdown.style.boxShadow = '0 4px 16px rgba(0,0,0,0.13)';
+    dropdown.style.minWidth = '100%';
+    dropdown.style.overflow = 'hidden';
+    dropdown.style.border = '1.5px solid #007bff';
+    platforms.forEach(function(platform) {
+      var opt = document.createElement('div');
+      opt.className = 'platform-option';
+      opt.textContent = platform;
+      opt.style.padding = '0.7em 1.2em';
+      opt.style.fontSize = '1rem';
+      opt.style.color = '#222';
+      opt.style.cursor = 'pointer';
+      opt.style.transition = 'background 0.2s';
+      opt.style.textAlign = 'left';
+      opt.onmouseenter = function() {
+        this.style.background = '#007bff';
+        this.style.color = '#fff';
+      };
+      opt.onmouseleave = function() {
+        this.style.background = '#fff';
+        this.style.color = '#222';
+      };
+      opt.onclick = function(e) {
+        e.stopPropagation();
+        selectText.textContent = platform;
+        dropdown.style.display = 'none';
+        selectBox.style.borderColor = '#e9ecef';
+      };
+      dropdown.appendChild(opt);
+    });
+    selectBox.appendChild(dropdown);
+    selectBox.onclick = function(e) {
+      e.stopPropagation();
+      dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+      selectBox.style.borderColor = dropdown.style.display === 'block' ? '#007bff' : '#e9ecef';
+    };
+    document.addEventListener('click', function() {
+      dropdown.style.display = 'none';
+      selectBox.style.borderColor = '#e9ecef';
+    });
+
+    // URL input
+    var urlInput = document.createElement('input');
+    urlInput.type = 'text';
+    urlInput.placeholder = 'Enter URL';
+    urlInput.style.width = '220px';
+    urlInput.style.height = '38px';
+    urlInput.style.fontSize = '1rem';
+    urlInput.style.color = '#222';
+    urlInput.style.background = '#f8f9fa';
+    urlInput.style.border = '2px solid #e9ecef';
+    urlInput.style.borderRadius = '8px';
+    urlInput.style.padding = '0.4em 1em';
+    urlInput.style.outline = 'none';
+    urlInput.style.transition = 'border-color 0.3s';
+    urlInput.style.boxSizing = 'border-box';
+    urlInput.onfocus = function() { urlInput.style.borderColor = '#007bff'; };
+    urlInput.onblur = function() { urlInput.style.borderColor = '#e9ecef'; };
+
+    // Delete icon
+    var del = document.createElement('span');
+    del.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#dc3545" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+    del.style.marginLeft = '1.2em';
+    del.style.cursor = 'pointer';
+    del.onclick = function() { row.remove(); };
+
+    row.appendChild(selectBox);
+    row.appendChild(urlInput);
+    row.appendChild(del);
+    container.appendChild(row);
+  }
+  addBtn.onclick = function() {
+    createRow();
+  };
+})();
+</script>
+<script>
+// Publications search box placeholder logic
+const publicationsAdminSearch = document.getElementById('publicationsAdminSearch');
+if (publicationsAdminSearch) {
+  publicationsAdminSearch.addEventListener('focus', function() {
+    publicationsAdminSearch.style.borderColor = '#007bff';
+  });
+  publicationsAdminSearch.addEventListener('blur', function() {
+    publicationsAdminSearch.style.borderColor = '#e9ecef';
+  });
+  publicationsAdminSearch.addEventListener('input', function() {
+    if (publicationsAdminSearch.value.length > 0) {
+      publicationsAdminSearch.setAttribute('placeholder', '');
+    } else {
+      publicationsAdminSearch.setAttribute('placeholder', 'Search publications...');
+    }
+  });
+}
+
+// --- Publication Type Dropdown Logic ---
+(function() {
+  const selectBox = document.getElementById('publicationTypeSelect');
+  const selectedText = document.getElementById('publicationTypeSelected');
+  const dropdown = document.getElementById('publicationTypeDropdown');
+  if (!selectBox || !selectedText || !dropdown) return;
+  let open = false;
+
+  // Ensure dropdown background is white
+  dropdown.style.background = '#fff';
+
+  function closeDropdown() {
+    dropdown.style.display = 'none';
+    selectBox.style.borderColor = '#e9ecef';
+    open = false;
+  }
+
+  selectBox.onclick = function(e) {
+    e.stopPropagation();
+    dropdown.style.display = open ? 'none' : 'block';
+    selectBox.style.borderColor = open ? '#e9ecef' : '#007bff';
+    open = !open;
+  };
+
+  // Option click and hover logic
+  Array.from(dropdown.getElementsByClassName('publication-type-option')).forEach(opt => {
+    opt.onclick = function(e) {
+      e.stopPropagation();
+      const type = this.getAttribute('data-type');
+      if (type === 'Select type') {
+        selectedText.textContent = 'Select type';
+        selectedText.style.color = '#888';
+      } else {
+        selectedText.textContent = type;
+        selectedText.style.color = '#111';
+      }
+      closeDropdown();
+    };
+    // Set color for dropdown options
+    if (opt.getAttribute('data-type') === 'Select type') {
+      opt.style.color = '#888';
+    } else {
+      opt.style.color = '#111';
+    }
+    // Remove blue highlight on hover, keep background white
+    opt.onmouseenter = function() {
+      this.style.background = '#fff';
+    };
+    opt.onmouseleave = function() {
+      this.style.background = '#fff';
+    };
+  });
+
+  // Initial color
+  selectedText.style.color = selectedText.textContent === 'Select type' ? '#888' : '#111';
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!selectBox.contains(e.target) && !dropdown.contains(e.target)) {
+      closeDropdown();
+    }
+  });
+})();
+
+// --- Publication Description Auto-Expand ---
+(function() {
+  const desc = document.getElementById('publicationDescriptionInput');
+  if (!desc) return;
+  function autoExpand() {
+    this.style.height = 'auto';
+    this.style.height = (this.scrollHeight) + 'px';
+  }
+  desc.addEventListener('input', autoExpand);
+  // Initial resize
+  desc.style.height = 'auto';
+  desc.style.height = (desc.scrollHeight) + 'px';
+})();
+</script>
+
+<!-- Edit Publication Modal (hidden by default) -->
+<div id="edit-publication-modal" class="edit-modal" style="display: none;">
+  <div class="edit-modal-content" style="max-width: 420px; min-width: 320px; width: 100%; display: flex; flex-direction: column; align-items: center;">
+    <div class="edit-modal-title" style="text-align: center; width: 100%; margin-bottom: 1.5em; color: #333;">Edit Publication</div>
+    <div class="edit-modal-field" style="width: 100%; margin-bottom: 1.2em;">
+      <label for="edit-type" class="edit-label" style="color: #333; font-weight: 600;">Type of Publication</label>
+      <div class="edit-dropdown-container" style="width: 100%; margin-top: 0.5em;">
+        <div id="edit-type-dropdown" class="edit-dropdown-selected" onclick="toggleTypeDropdown()" style="background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 8px; height: 44px; display: flex; align-items: center; cursor: pointer; color: #333; font-size: 1rem; padding: 0 1em;">
+          <span id="edit-type-selected" style="flex: 1; color: #333;">International Conference</span>
+          <span class="edit-dropdown-arrow" style="color: #888; font-size: 1.2em;">&#9660;</span>
+        </div>
+        <div id="edit-type-options" class="edit-dropdown-options" style="display: none; position: absolute; left: 0; top: 100%; z-index: 10; background: #fff; border-radius: 10px; box-shadow: 0 4px 16px rgba(0,0,0,0.13); min-width: 100%; overflow: hidden;">
+          <div class="edit-dropdown-option" style="color: #333;">National conference</div>
+          <div class="edit-dropdown-option" style="color: #333;">International conference</div>
+          <div class="edit-dropdown-option" style="color: #333;">International journal</div>
+          <div class="edit-dropdown-option" style="color: #333;">National journal</div>
+          <div class="edit-dropdown-option" style="color: #333;">Book</div>
+          <div class="edit-dropdown-option" style="color: #333;">Book chapter</div>
+        </div>
+      </div>
+    </div>
+    <div class="edit-modal-field" style="width: 100%; margin-bottom: 1.2em;">
+      <label for="edit-description" class="edit-label" style="color: #333; font-weight: 600;">Description</label>
+      <textarea id="edit-description" class="edit-description-box" rows="5" style="width: 100%; min-height: 44px; font-size: 1rem; color: #333; background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 8px; padding: 0.7em 1em; box-sizing: border-box; resize: vertical; overflow: auto; transition: border-color 0.3s;"></textarea>
+    </div>
+    <div class="edit-modal-actions" style="width: 100%; display: flex; justify-content: flex-end; gap: 1em; margin-top: 1.5em;">
+      <button class="update-btn" onclick="updatePublication()" style="background: #007bff; color: #fff; border: none; border-radius: 8px; padding: 0.7em 2.2em; font-size: 1rem; font-weight: 600; cursor: pointer;">Update</button>
+      <button class="cancel-btn" onclick="closeEditModal()" style="background: #e0e0e0; color: #333; border: none; border-radius: 8px; padding: 0.7em 2.2em; font-size: 1rem; font-weight: 600; cursor: pointer;">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Editable Card Modal for People -->
+<div id="editPersonModal" class="edit-modal" style="display:none;">
+  <div class="edit-modal-content">
+    <div class="edit-modal-header">
+      <span class="edit-modal-title">Edit Person</span>
+    </div>
+    <div class="edit-modal-body">
+      <!-- Name and Role -->
+      <div class="edit-row">
+        <div class="edit-col" style="flex:2;">
+          <label class="edit-label" for="editPersonNameInput">Name</label>
+          <input id="editPersonNameInput" class="edit-input" type="text" />
+          <!-- Roll Number (moved here) -->
+          <div id="editRollNumberField" style="display:none; margin-top:10px;">
+            <label for="editRollNumberInput">Roll Number</label>
+            <input type="text" id="editRollNumberInput" class="input" />
+          </div>
+        </div>
+        <div class="edit-col" style="flex:1; margin-left: 1.5em;">
+          <label class="edit-label" for="editPersonRoleInput">Role</label>
+          <div id="editPersonRoleInput" class="edit-dropdown">
+            <span id="editPersonRoleSelected" class="edit-dropdown-selected">Select Role</span>
+            <span class="edit-dropdown-arrow">&#9660;</span>
+            <div id="editPersonRoleDropdown" class="edit-dropdown-list">
+              <div class="edit-dropdown-option" data-role="Faculty Coordinator">Faculty Coordinator</div>
+              <div class="edit-dropdown-option" data-role="Faculty">Faculty</div>
+              <div class="edit-dropdown-option" data-role="PhD Researcher">PhD Researcher</div>
+              <div class="edit-dropdown-option" data-role="M.Tech Student">M.Tech Student</div>
+              <div class="edit-dropdown-option" data-role="Student">Student</div>
+              <div class="edit-dropdown-option" data-role="Summer Intern">Summer Intern</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Info -->
+      <div class="edit-row" style="margin-top:1.5em;">
+        <label class="edit-label" for="editPersonInfoInput">Info</label>
+      </div>
+      <div class="edit-row">
+        <textarea id="editPersonInfoInput" class="edit-input" rows="3" placeholder="Use semicolon (;) to separate points"></textarea>
+      </div>
+      <!-- Social Links -->
+      <div class="edit-row" style="margin-top:1.5em;">
+        <label class="edit-label">Social Links</label>
+      </div>
+      <div class="edit-row">
+        <div id="editSocialLinksContainer" class="edit-social-links"></div>
+      </div>
+      <div class="edit-row">
+        <button id="editAddSocialLinkBtn" class="edit-add-social-btn" type="button">
+          <span style="font-size:1.2em;">+</span> Add Social Link
+        </button>
+      </div>
+      <div class="edit-row" id="editAddSocialLinkInputs" style="display:none; gap: 0.7em; align-items: center;">
+        <input id="editSocialPlatformInput" class="edit-input" type="text" placeholder="Platform (e.g. LinkedIn)" style="width: 40%;" />
+        <input id="editSocialUrlInput" class="edit-input" type="text" placeholder="URL (e.g. https://linkedin.com/in/...)" style="width: 55%;" />
+        <button id="editSaveSocialLinkBtn" class="edit-add-social-btn" type="button">Save</button>
+      </div>
+      <!-- Profile Image and Upload -->
+      <div class="edit-row" style="margin-top:2em; align-items:center;">
+        <div class="edit-avatar-section">
+          <div id="editPersonAvatarCircle" class="edit-avatar-circle">
+            <img id="editPersonAvatarIcon" src="https://cdn0.iconfinder.com/data/icons/set-ui-app-android/32/8-512.png" alt="avatar" />
+          </div>
+          <button id="editUploadImageBtn" class="edit-upload-btn" type="button">
+            <svg width="20" height="20" fill="#fff" viewBox="0 0 20 20"><path d="M16.7 10.8c-.4 0-.7.3-.7.7v3.5c0 .4-.3.7-.7.7H4.7c-.4 0-.7-.3-.7-.7v-3.5c0-.4-.3-.7-.7-.7s-.7.3-.7.7v3.5c0 1.2 1 2.2 2.2 2.2h10.6c1.2 0 2.2-1 2.2-2.2v-3.5c0-.4-.3-.7-.7-.7z"/><path d="M10.7 12.7c.3.3.7.3 1 0l3.2-3.2c.3-.3.3-.7 0-1s-.7-.3-1 0l-1.8 1.8V3.7c0-.4-.3-.7-.7-.7s-.7.3-.7.7v6.6l-1.8-1.8c-.3-.3-.7-.3-1 0s-.3.7 0 1l3.2 3.2z"/></svg>
+            Upload Image
+          </button>
+          <input id="editPersonImageInput" type="file" accept="image/*" style="display: none;" onchange="handleEditImageUpload(this);" />
+        </div>
+      </div>
+      <!-- Show in People Page -->
+      <div class="show-in-people-row" style="margin-top:10px;">
+        <label for="editShowInPeopleCheckbox" class="custom-checkbox-label">
+          <input type="checkbox" id="editShowInPeopleCheckbox" style="display:none;">
+          <span class="custom-checkbox"></span>
+          Show in People Page
+        </label>
+      </div>
+      <!-- Crop Card (hidden by default) -->
+      <div id="editCropCard" class="edit-crop-card" style="display:none;">
+        <div class="edit-crop-header">
+          <span>Adjust Profile Image</span>
+          <button id="editCloseCropBtn" class="edit-crop-close">&times;</button>
+        </div>
+        <div class="edit-crop-body">
+          <img id="editCropImagePreview" src="" style="width:100%;height:300px;object-fit:contain;border-radius:8px;background:#f0f0f0;" />
+        </div>
+        <div class="edit-crop-footer">
+          <button id="editSaveCropBtn" class="edit-crop-save">Save Image</button>
+        </div>
+      </div>
+      <!-- Action Buttons -->
+      <div class="edit-row" style="margin-top:2em; justify-content:flex-end;">
+        <button id="saveEditPersonBtn" class="edit-action-btn edit-action-update" type="button">Update Person</button>
+        <button id="cancelEditPersonBtn" class="edit-action-btn edit-action-cancel" type="button">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
