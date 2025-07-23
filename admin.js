@@ -1763,7 +1763,6 @@ async function renderSectionTable(section) {
       const closeEditModal = document.getElementById('closeEditModal');
       const saveEditPersonBtn = document.getElementById('saveEditPersonBtn');
       const cancelEditPersonBtn = document.getElementById('cancelEditPersonBtn');
-      
       console.log('Looking for edit button:', editPersonBtn);
       console.log('Looking for edit modal:', editPersonModal);
       
@@ -2692,7 +2691,6 @@ if (editBtn) {
     };
   }
 })();
-// ... existing code ...
 
 document.addEventListener('DOMContentLoaded', function() {
   const calendarIcon = document.getElementById('calendarIcon');
@@ -3039,7 +3037,6 @@ function deleteCourseCard(id) {
   if (card) card.remove();
 }
 
-// ... existing code ...
 // Edit Course Modal logic
 function openEditCourseModal() {
   document.getElementById('editCourseModal').style.display = 'block';
@@ -3577,7 +3574,6 @@ let event1Data = {
   files: []
 };
 // ... existing code ...
-
 // --- Achievements Data Array ---
 let achievementsData = [];
 
