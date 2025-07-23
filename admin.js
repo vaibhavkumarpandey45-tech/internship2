@@ -1765,7 +1765,6 @@ async function renderSectionTable(section) {
       const cancelEditPersonBtn = document.getElementById('cancelEditPersonBtn');
       console.log('Looking for edit button:', editPersonBtn);
       console.log('Looking for edit modal:', editPersonModal);
-      
       // Check if elements exist
       if (editPersonBtn && editPersonModal && closeEditModal && saveEditPersonBtn) {
         console.log('Edit modal elements found successfully');
@@ -3576,7 +3575,6 @@ let event1Data = {
 // ... existing code ...
 // --- Achievements Data Array ---
 let achievementsData = [];
-
 // Load achievements from localStorage
 function loadAchievementsFromStorage() {
   const stored = localStorage.getItem('achievementsData');
